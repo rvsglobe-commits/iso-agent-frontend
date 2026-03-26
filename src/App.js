@@ -1,39 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 function App() {
-  const [data, setData] = useState(null);
+  const [message, setMessage] = useState("");
+  const [response, setResponse] = useState("");
 
-  // ✅ DEBUG LOGS (add here)
-  console.log("🔥 APP LOADED");
-  console.log("API URL:", process.env.REACT_APP_API_URL);
-
-useEffect(() => {
-  const url = "https://iso-agent-backend-production.up.railway.app/";
-
-  console.log("🔥 APP LOADED");
-  console.log("API URL:", url);
-
-  fetch(url)
-    .then((res) => {
-      console.log("STATUS:", res.status);
-      return res.json();
-    })
-    .then((data) => {
-      console.log("DATA:", data);
-      setData(data);
-    })
-    .catch((err) => {
-      console.error("ERROR:", err);
+  const sendMessage = async () => {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer test_key"
+      },
+      body: JSON.stringify({
+        message: message,
+        standard: "17025",
+        session_id: "demo-session"
+      })
     });
-}, []);
+
+    const data = await res.json();
+    setResponse(data.reply);
+  };
 
   return (
     <div style={{ padding: "20px" }}>
-      {/* ✅ UPDATED TEXT */}
-      <h1>ISO Agent ✅ UPDATED</h1>
+      <h1>ISO Agent 🤖</h1>
 
-      <h3>Backend Response:</h3>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <input
+        type="text"
+        placeholder="Ask ISO question..."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+
+      <button onClick={sendMessage}>Send</button>
+
+      <div style={{ marginTop: "20px" }}>
+        <h3>Response:</h3>
+        <p>{response}</p>
+      </div>
     </div>
   );
 }

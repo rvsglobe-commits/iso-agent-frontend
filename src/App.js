@@ -4,7 +4,7 @@ function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL)
+    fetch(`${process.env.REACT_APP_API_URL}/`)
       .then((res) => res.json())
       .then((data) => setData(data))
       .catch((err) => console.error(err));

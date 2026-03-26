@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 function App() {
   const [data, setData] = useState(null);
 
+  console.log("API URL:", process.env.REACT_APP_API_URL);
+  
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/`)
       .then((res) => res.json())

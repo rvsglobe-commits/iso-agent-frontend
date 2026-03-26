@@ -8,7 +8,7 @@ function App() {
   console.log("API URL:", process.env.REACT_APP_API_URL);
 
 useEffect(() => {
-  const url = process.env.REACT_APP_API_URL;
+  const url = "https://iso-agent-backend-production.up.railway.app/";
 
   console.log("🔥 APP LOADED");
   console.log("API URL:", url);

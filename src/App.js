@@ -13,7 +13,7 @@ useEffect(() => {
   console.log("🔥 APP LOADED");
   console.log("API URL:", url);
 
-  fetch(url + "/")
+  fetch(url)
     .then((res) => {
       console.log("STATUS:", res.status);
       return res.json();

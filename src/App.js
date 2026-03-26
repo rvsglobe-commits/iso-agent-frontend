@@ -7,12 +7,25 @@ function App() {
   console.log("🔥 APP LOADED");
   console.log("API URL:", process.env.REACT_APP_API_URL);
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/`)
-      .then((res) => res.json())
-      .then((data) => setData(data))
-      .catch((err) => console.error(err));
-  }, []);
+useEffect(() => {
+  const url = process.env.REACT_APP_API_URL;
+
+  console.log("🔥 APP LOADED");
+  console.log("API URL:", url);
+
+  fetch(url + "/")
+    .then((res) => {
+      console.log("STATUS:", res.status);
+      return res.json();
+    })
+    .then((data) => {
+      console.log("DATA:", data);
+      setData(data);
+    })
+    .catch((err) => {
+      console.error("ERROR:", err);
+    });
+}, []);
 
   return (
     <div style={{ padding: "20px" }}>

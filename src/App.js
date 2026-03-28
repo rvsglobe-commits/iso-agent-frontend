@@ -3,9 +3,11 @@ import { useState } from "react";
 function App() {
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const sendMessage = async () => {
     if (!message) return;
+    setLoading(true);
 
     // Add user message
     const userMsg = { role: "user", content: message };
@@ -26,15 +28,27 @@ function App() {
       });
 
       const data = await res.json();
+      setLoading(false);
 
       // Add bot response
       // const botMsg = { role: "assistant", content: data.reply };
       console.log("API RESPONSE:", data);
+      let replyText = "⚠️ No response from backend";
+      if (data && typeof data === "object") {
+        if (data.reply) {
+          replyText = data.reply;
+        } else if (data.message) {
+          replyText = data.message;
+        } else if (data.detail) {
+          replyText = JSON.stringify(data.detail);
+        }
+}
       const botMsg = {
                       role: "assistant",
-                      content: data.reply || "⚠️ No response from backend"
+                      content: data.replyText 
                     };
       setChat(prev => [...prev, botMsg]);
+      setLoading(false); // ✅ END loading
 
     } catch (err) {
       setChat(prev => [...prev, {
@@ -51,6 +65,7 @@ function App() {
       <h2>ISO Agent 🤖</h2>
 
       <div style={styles.chatBox}>
+        {loading && <p>🤖 Thinking...</p>}
         {chat.map((msg, index) => (
           <div
             key={index}

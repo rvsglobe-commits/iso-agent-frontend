@@ -28,7 +28,12 @@ function App() {
       const data = await res.json();
 
       // Add bot response
-      const botMsg = { role: "assistant", content: data.reply };
+      // const botMsg = { role: "assistant", content: data.reply };
+      console.log("API RESPONSE:", data);
+      const botMsg = {
+                      role: "assistant",
+                      content: data.reply || "⚠️ No response from backend"
+                    };
       setChat(prev => [...prev, botMsg]);
 
     } catch (err) {

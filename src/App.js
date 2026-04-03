@@ -34,7 +34,7 @@ function App() {
       console.log("API RESPONSE:", data);
 
       let replyText = "⚠️ No response from backend";
-      
+
       if (data && typeof data === "object") {
         if (data.reply) {
           replyText = data.reply;
@@ -61,6 +61,49 @@ function App() {
     setMessage("");
   };
 
+  const generateSOP = async () => {
+  try {
+    setLoading(true);
+
+    const res = await fetch(process.env.REACT_APP_API_URL + "/document/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        doc_type: "SOP",
+        standard: "17025",
+        clause: "7.3",
+        title: "Sampling SOP",
+        fields: {
+          organization: "ABC Lab",
+          department: "Civil"
+        },
+        output_format: "text"
+      })
+    });
+
+    const data = await res.json();
+
+    const botMsg = {
+    role: "assistant",
+    content: data.content
+      ? "📄 SOP Generated Successfully\n\n" + data.content
+      : "⚠️ No content returned"
+  };
+
+    setChat(prev => [...prev, botMsg]);
+    setLoading(false);
+
+  } catch (err) {
+    setChat(prev => [
+      ...prev,
+      { role: "assistant", content: "❌ Error generating SOP" }
+    ]);
+    setLoading(false);
+  }
+};
+
   return (
     <div style={styles.container}>
       <h2>ISO Agent 🤖</h2>
@@ -81,6 +124,9 @@ function App() {
           </div>
         ))}
       </div>
+      <button onClick={generateSOP} style={styles.button}>
+        SOP generation (Clause 7.3)
+      </button>
 
       <div style={styles.inputBox}>
         <input

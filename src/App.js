@@ -126,6 +126,30 @@ function App() {
       })
     });
 
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Sampling_SOP.docx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    setLoading(false);
+
+  } catch (err) {
+    console.error(err);
+
+    setChat(prev => [
+      ...prev,
+      { role: "assistant", content: "❌ Error downloading SOP" }
+    ]);
+
+    setLoading(false);
+  }
+};
+
   return (
     <div style={styles.container}>
       <h2>ISO Agent 🤖</h2>

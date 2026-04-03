@@ -104,6 +104,28 @@ function App() {
   }
 };
 
+  const downloadSOP = async () => {
+  try {
+    setLoading(true);
+
+    const res = await fetch(process.env.REACT_APP_API_URL + "/document/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        doc_type: "SOP",
+        standard: "17025",
+        clause: "7.3",
+        title: "Sampling SOP",
+        fields: {
+          organization: "ABC Lab",
+          department: "Civil"
+        },
+        output_format: "docx"
+      })
+    });
+
   return (
     <div style={styles.container}>
       <h2>ISO Agent 🤖</h2>
@@ -127,6 +149,11 @@ function App() {
       <button onClick={generateSOP} style={styles.button}>
         SOP generation (Clause 7.3)
       </button>
+
+      <button onClick={downloadSOP} style={styles.button}>
+        Download SOP (Word)
+      </button>
+
 
       <div style={styles.inputBox}>
         <input
